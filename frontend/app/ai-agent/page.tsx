@@ -60,7 +60,9 @@ export default function AIAgentPage() {
     setMessages((prev) => [...prev, { id: assistantId, role: 'assistant', content: '' }])
 
     try {
-      const response = await fetch('/api/ocean-chat', {
+      // Try the intelligent query endpoint first (Python backend)
+      // Falls back to Groq if backend is unavailable
+      const response = await fetch('/api/ocean-query', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ messages: bodyMessages }),
