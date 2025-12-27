@@ -1,0 +1,169 @@
+2025-12-27 13:25:50.536914: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2025-12-27 13:25:54.841632: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+========================================================================
+LSTM Mixed Layer Depth Prediction - Training Pipeline
+========================================================================
+CWD: D:\Documents\ACADEMIC\BTECH\TY\Sem-I_Mod-V\EDAI-V\OceanFrontRepo\OceanFront\backend\models\LSTM
+PARQUET_DIR: D:\Documents\ACADEMIC\BTECH\TY\Sem-I_Mod-V\EDAI-V\OceanFrontRepo\OceanFront\oceanFrontData\Parquet
+MODEL_SAVE_DIR: D:\Documents\ACADEMIC\BTECH\TY\Sem-I_Mod-V\EDAI-V\OceanFrontRepo\OceanFront\backend\models
+[INFO] Loading Parquet files...
+[INFO] Found 5 Parquet files
+[INFO] Loaded D:\Documents\ACADEMIC\BTECH\TY\Sem-I_Mod-V\EDAI-V\OceanFrontRepo\OceanFront\oceanFrontData\Parquet\nodc_R1901514_311.parquet: 9 rows
+[INFO] Loaded D:\Documents\ACADEMIC\BTECH\TY\Sem-I_Mod-V\EDAI-V\OceanFrontRepo\OceanFront\oceanFrontData\Parquet\nodc_R1901514_312.parquet: 18 rows
+[INFO] Loaded D:\Documents\ACADEMIC\BTECH\TY\Sem-I_Mod-V\EDAI-V\OceanFrontRepo\OceanFront\oceanFrontData\Parquet\nodc_R1901514_313.parquet: 18 rows
+[INFO] Loaded D:\Documents\ACADEMIC\BTECH\TY\Sem-I_Mod-V\EDAI-V\OceanFrontRepo\OceanFront\oceanFrontData\Parquet\nodc_R1901605_265.parquet: 18 rows
+[INFO] Loaded D:\Documents\ACADEMIC\BTECH\TY\Sem-I_Mod-V\EDAI-V\OceanFrontRepo\OceanFront\oceanFrontData\Parquet\nodc_R3901528_118.parquet: 504 rows
+[INFO] Total rows after combining: 567
+[INFO] Preparing features...
+[INFO] Raw columns: ['n_prof', 'n_param', 'n_levels', 'n_calib', 'n_history', 'data_type', 'format_version', 'handbook_version', 'reference_date_time', 'date_creation', 'date_update', 'platform_number', 'project_name', 'pi_name', 'station_parameters', 'cycle_number', 'direction', 'data_centre', 'dc_reference', 'data_state_indicator', 'data_mode', 'platform_type', 'float_serial_no', 'firmware_version', 'wmo_inst_type', 'juld', 'juld_qc', 'juld_location', 'latitude', 'longitude', 'position_qc', 'positioning_system', 'vertical_sampling_scheme', 'config_mission_number', 'profile_pres_qc', 'profile_temp_qc', 'profile_psal_qc', 'pres', 'pres_qc', 'pres_adjusted', 'pres_adjusted_qc', 'pres_adjusted_error', 'temp', 'temp_qc', 'temp_adjusted', 'temp_adjusted_qc', 'temp_adjusted_error', 'psal', 'psal_qc', 'psal_adjusted', 'psal_adjusted_qc', 'psal_adjusted_error', 'parameter', 'scientific_calib_equation', 'scientific_calib_coefficient', 'scientific_calib_comment', 'scientific_calib_date', 'history_institution', 'history_step', 'history_software', 'history_software_release', 'history_reference', 'history_date', 'history_action', 'history_parameter', 'history_start_pres', 'history_stop_pres', 'history_previous_value', 'history_qctest', 'crs']
+[INFO] Columns after normalization: ['n_prof', 'n_param', 'n_levels', 'n_calib', 'n_history', 'data_type', 'format_version', 'handbook_version', 'reference_date_time', 'date_creation', 'date_update', 'platform_number', 'project_name', 'pi_name', 'station_parameters', 'cycle_number', 'direction', 'data_centre', 'dc_reference', 'data_state_indicator', 'data_mode', 'platform_type', 'float_serial_no', 'firmware_version', 'wmo_inst_type', 'juld', 'juld_qc', 'juld_location', 'latitude', 'longitude', 'position_qc', 'positioning_system', 'vertical_sampling_scheme', 'config_mission_number', 'profile_pres_qc', 'profile_temp_qc', 'profile_psal_qc', 'pres', 'pres_qc', 'pres_adjusted', 'pres_adjusted_qc', 'pres_adjusted_error', 'temp', 'temp_qc', 'temp_adjusted', 'temp_adjusted_qc', 'temp_adjusted_error', 'psal', 'psal_qc', 'psal_adjusted', 'psal_adjusted_qc', 'psal_adjusted_error', 'parameter', 'scientific_calib_equation', 'scientific_calib_coefficient', 'scientific_calib_comment', 'scientific_calib_date', 'history_institution', 'history_step', 'history_software', 'history_software_release', 'history_reference', 'history_date', 'history_action', 'history_parameter', 'history_start_pres', 'history_stop_pres', 'history_previous_value', 'history_qctest', 'crs', 'depth', 'temperature', 'salinity', 'date_time', 'profile_id']
+[INFO] Calculating MLD (ΔT>0.5°C from 10.0 m)
+[INFO] Using features: ['temperature', 'salinity', 'latitude', 'longitude', 'month', 'day_of_year', 'depth']
+[INFO] Final dataset: X=(504, 7), y=(504, 1)
+[INFO] Starting training...
+[INFO] Sequence shapes: X=(474, 30, 7), y=(474, 1)
+[INFO] Building LSTM model...
+2025-12-27 13:25:56.954163: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: SSE3 SSE4.1 SSE4.2 AVX AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+D:\Python313\Lib\site-packages\keras\src\layers\rnn\rnn.py:199: UserWarning: Do not pass an `input_shape`/`input_dim` argument to a layer. When using Sequential models, prefer using an `Input(shape)` object as the first layer in the model instead.
+  super().__init__(**kwargs)
+Model: "sequential"
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━┓
+┃ Layer (type)                         ┃ Output Shape                ┃         Param # ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━┩
+│ lstm (LSTM)                          │ (None, 30, 128)             │          69,632 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ dropout (Dropout)                    │ (None, 30, 128)             │               0 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ lstm_1 (LSTM)                        │ (None, 30, 64)              │          49,408 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ dropout_1 (Dropout)                  │ (None, 30, 64)              │               0 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ lstm_2 (LSTM)                        │ (None, 32)                  │          12,416 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ dropout_2 (Dropout)                  │ (None, 32)                  │               0 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ dense (Dense)                        │ (None, 16)                  │             528 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ dropout_3 (Dropout)                  │ (None, 16)                  │               0 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ dense_1 (Dense)                      │ (None, 1)                   │              17 │
+└──────────────────────────────────────┴─────────────────────────────┴─────────────────┘
+ Total params: 132,001 (515.63 KB)
+ Trainable params: 132,001 (515.63 KB)
+ Non-trainable params: 0 (0.00 B)
+Epoch 1/60
+ 9/10 ━━━━━━━━━━━━━━━━━━━━ 0s 42ms/step - loss: 0.0061 - mae: 0.0547 - mse: 0.0061
+Epoch 1: val_loss improved from None to 0.00019, saving model to D:\Documents\ACADEMIC\BTECH\TY\Sem-I_Mod-V\EDAI-V\OceanFrontRepo\OceanFront\backend\models\lstm_mld_best.keras
+10/10 ━━━━━━━━━━━━━━━━━━━━ 7s 146ms/step - loss: 0.0039 - mae: 0.0438 - mse: 0.0039 - val_loss: 1.8676e-04 - val_mae: 0.0130 - val_mse: 1.8676e-04 - learning_rate: 0.0010
+Epoch 2/60
+ 9/10 ━━━━━━━━━━━━━━━━━━━━ 0s 41ms/step - loss: 8.1175e-04 - mae: 0.0218 - mse: 8.1175e-04
+Epoch 2: val_loss improved from 0.00019 to 0.00003, saving model to D:\Documents\ACADEMIC\BTECH\TY\Sem-I_Mod-V\EDAI-V\OceanFrontRepo\OceanFront\backend\models\lstm_mld_best.keras
+10/10 ━━━━━━━━━━━━━━━━━━━━ 1s 65ms/step - loss: 6.2851e-04 - mae: 0.0186 - mse: 6.2851e-04 - val_loss: 2.8680e-05 - val_mae: 0.0049 - val_mse: 2.8680e-05 - learning_rate: 0.0010
+Epoch 3/60
+ 9/10 ━━━━━━━━━━━━━━━━━━━━ 0s 41ms/step - loss: 1.7790e-04 - mae: 0.0088 - mse: 1.7790e-04
+Epoch 3: val_loss improved from 0.00003 to 0.00002, saving model to D:\Documents\ACADEMIC\BTECH\TY\Sem-I_Mod-V\EDAI-V\OceanFrontRepo\OceanFront\backend\models\lstm_mld_best.keras
+10/10 ━━━━━━━━━━━━━━━━━━━━ 1s 65ms/step - loss: 1.6419e-04 - mae: 0.0088 - mse: 1.6419e-04 - val_loss: 2.0973e-05 - val_mae: 0.0041 - val_mse: 2.0973e-05 - learning_rate: 0.0010
+Epoch 4/60
+ 9/10 ━━━━━━━━━━━━━━━━━━━━ 0s 42ms/step - loss: 6.8124e-05 - mae: 0.0056 - mse: 6.8124e-05
+Epoch 4: val_loss improved from 0.00002 to 0.00000, saving model to D:\Documents\ACADEMIC\BTECH\TY\Sem-I_Mod-V\EDAI-V\OceanFrontRepo\OceanFront\backend\models\lstm_mld_best.keras
+10/10 ━━━━━━━━━━━━━━━━━━━━ 1s 65ms/step - loss: 5.3966e-05 - mae: 0.0050 - mse: 5.3966e-05 - val_loss: 1.2808e-06 - val_mae: 0.0011 - val_mse: 1.2808e-06 - learning_rate: 0.0010
+Epoch 5/60
+ 9/10 ━━━━━━━━━━━━━━━━━━━━ 0s 42ms/step - loss: 2.4082e-05 - mae: 0.0032 - mse: 2.4082e-05
+Epoch 5: val_loss improved from 0.00000 to 0.00000, saving model to D:\Documents\ACADEMIC\BTECH\TY\Sem-I_Mod-V\EDAI-V\OceanFrontRepo\OceanFront\backend\models\lstm_mld_best.keras
+10/10 ━━━━━━━━━━━━━━━━━━━━ 1s 65ms/step - loss: 2.2812e-05 - mae: 0.0029 - mse: 2.2812e-05 - val_loss: 3.8075e-07 - val_mae: 5.9472e-04 - val_mse: 3.8075e-07 - learning_rate: 0.0010
+Epoch 6/60
+ 9/10 ━━━━━━━━━━━━━━━━━━━━ 0s 41ms/step - loss: 1.3271e-05 - mae: 0.0021 - mse: 1.3271e-05
+Epoch 6: val_loss improved from 0.00000 to 0.00000, saving model to D:\Documents\ACADEMIC\BTECH\TY\Sem-I_Mod-V\EDAI-V\OceanFrontRepo\OceanFront\backend\models\lstm_mld_best.keras
+10/10 ━━━━━━━━━━━━━━━━━━━━ 1s 63ms/step - loss: 1.6563e-05 - mae: 0.0022 - mse: 1.6563e-05 - val_loss: 3.4049e-08 - val_mae: 1.8126e-04 - val_mse: 3.4049e-08 - learning_rate: 0.0010
+Epoch 7/60
+ 9/10 ━━━━━━━━━━━━━━━━━━━━ 0s 42ms/step - loss: 5.6290e-06 - mae: 0.0012 - mse: 5.6290e-06
+Epoch 7: val_loss improved from 0.00000 to 0.00000, saving model to D:\Documents\ACADEMIC\BTECH\TY\Sem-I_Mod-V\EDAI-V\OceanFrontRepo\OceanFront\backend\models\lstm_mld_best.keras
+
+Epoch 7: ReduceLROnPlateau reducing learning rate to 0.0005000000237487257.
+10/10 ━━━━━━━━━━━━━━━━━━━━ 1s 64ms/step - loss: 6.1552e-06 - mae: 0.0012 - mse: 6.1552e-06 - val_loss: 2.5799e-09 - val_mae: 5.0261e-05 - val_mse: 2.5799e-09 - learning_rate: 0.0010
+Epoch 8/60
+ 9/10 ━━━━━━━━━━━━━━━━━━━━ 0s 41ms/step - loss: 1.1385e-05 - mae: 0.0017 - mse: 1.1385e-05
+Epoch 8: val_loss did not improve from 0.00000
+10/10 ━━━━━━━━━━━━━━━━━━━━ 1s 57ms/step - loss: 1.6747e-05 - mae: 0.0016 - mse: 1.6747e-05 - val_loss: 4.1485e-09 - val_mae: 6.4408e-05 - val_mse: 4.1485e-09 - learning_rate: 5.0000e-04
+Epoch 9/60
+ 9/10 ━━━━━━━━━━━━━━━━━━━━ 0s 42ms/step - loss: 8.1989e-06 - mae: 0.0013 - mse: 8.1989e-06
+Epoch 9: val_loss did not improve from 0.00000
+10/10 ━━━━━━━━━━━━━━━━━━━━ 1s 57ms/step - loss: 9.3728e-06 - mae: 0.0014 - mse: 9.3728e-06 - val_loss: 2.4328e-08 - val_mae: 1.5597e-04 - val_mse: 2.4328e-08 - learning_rate: 5.0000e-04
+Epoch 10/60
+ 9/10 ━━━━━━━━━━━━━━━━━━━━ 0s 43ms/step - loss: 1.0111e-05 - mae: 0.0012 - mse: 1.0111e-05
+Epoch 10: val_loss did not improve from 0.00000
+10/10 ━━━━━━━━━━━━━━━━━━━━ 1s 59ms/step - loss: 6.2821e-06 - mae: 0.0011 - mse: 6.2821e-06 - val_loss: 3.8141e-08 - val_mae: 1.9530e-04 - val_mse: 3.8141e-08 - learning_rate: 5.0000e-04
+Epoch 11/60
+ 9/10 ━━━━━━━━━━━━━━━━━━━━ 0s 41ms/step - loss: 6.2837e-06 - mae: 0.0012 - mse: 6.2837e-06
+Epoch 11: val_loss did not improve from 0.00000
+10/10 ━━━━━━━━━━━━━━━━━━━━ 1s 58ms/step - loss: 6.8240e-06 - mae: 0.0012 - mse: 6.8240e-06 - val_loss: 4.1061e-08 - val_mae: 2.0264e-04 - val_mse: 4.1061e-08 - learning_rate: 5.0000e-04
+Epoch 12/60
+10/10 ━━━━━━━━━━━━━━━━━━━━ 0s 44ms/step - loss: 6.2461e-06 - mae: 0.0011 - mse: 6.2461e-06
+Epoch 12: val_loss did not improve from 0.00000
+
+Epoch 12: ReduceLROnPlateau reducing learning rate to 0.0002500000118743628.
+10/10 ━━━━━━━━━━━━━━━━━━━━ 1s 61ms/step - loss: 5.6164e-06 - mae: 0.0010 - mse: 5.6164e-06 - val_loss: 6.3357e-08 - val_mae: 2.5171e-04 - val_mse: 6.3357e-08 - learning_rate: 5.0000e-04
+Epoch 13/60
+ 9/10 ━━━━━━━━━━━━━━━━━━━━ 0s 42ms/step - loss: 4.1741e-06 - mae: 9.7987e-04 - mse: 4.1741e-06
+Epoch 13: val_loss did not improve from 0.00000
+10/10 ━━━━━━━━━━━━━━━━━━━━ 1s 58ms/step - loss: 5.2827e-06 - mae: 0.0012 - mse: 5.2827e-06 - val_loss: 6.3247e-08 - val_mae: 2.5149e-04 - val_mse: 6.3247e-08 - learning_rate: 2.5000e-04
+Epoch 14/60
+ 9/10 ━━━━━━━━━━━━━━━━━━━━ 0s 42ms/step - loss: 2.5804e-06 - mae: 8.0021e-04 - mse: 2.5804e-06
+Epoch 14: val_loss did not improve from 0.00000
+10/10 ━━━━━━━━━━━━━━━━━━━━ 1s 58ms/step - loss: 3.6101e-06 - mae: 9.1201e-04 - mse: 3.6101e-06 - val_loss: 6.0362e-08 - val_mae: 2.4569e-04 - val_mse: 6.0362e-08 - learning_rate: 2.5000e-04
+Epoch 15/60
+ 9/10 ━━━━━━━━━━━━━━━━━━━━ 0s 41ms/step - loss: 4.2939e-06 - mae: 8.6607e-04 - mse: 4.2939e-06
+Epoch 15: val_loss did not improve from 0.00000
+10/10 ━━━━━━━━━━━━━━━━━━━━ 1s 57ms/step - loss: 3.8947e-06 - mae: 8.7829e-04 - mse: 3.8947e-06 - val_loss: 6.6532e-08 - val_mae: 2.5794e-04 - val_mse: 6.6532e-08 - learning_rate: 2.5000e-04
+Epoch 16/60
+ 9/10 ━━━━━━━━━━━━━━━━━━━━ 0s 43ms/step - loss: 3.6578e-06 - mae: 8.6477e-04 - mse: 3.6578e-06
+Epoch 16: val_loss did not improve from 0.00000
+10/10 ━━━━━━━━━━━━━━━━━━━━ 1s 58ms/step - loss: 3.4808e-06 - mae: 8.6326e-04 - mse: 3.4808e-06 - val_loss: 6.9543e-08 - val_mae: 2.6371e-04 - val_mse: 6.9543e-08 - learning_rate: 2.5000e-04
+Epoch 17/60
+ 9/10 ━━━━━━━━━━━━━━━━━━━━ 0s 42ms/step - loss: 5.4550e-06 - mae: 8.7740e-04 - mse: 5.4550e-06
+Epoch 17: val_loss did not improve from 0.00000
+
+Epoch 17: ReduceLROnPlateau reducing learning rate to 0.0001250000059371814.
+10/10 ━━━━━━━━━━━━━━━━━━━━ 1s 59ms/step - loss: 8.1893e-06 - mae: 0.0011 - mse: 8.1893e-06 - val_loss: 5.6043e-08 - val_mae: 2.3673e-04 - val_mse: 5.6043e-08 - learning_rate: 2.5000e-04
+Epoch 18/60
+ 9/10 ━━━━━━━━━━━━━━━━━━━━ 0s 43ms/step - loss: 5.6582e-06 - mae: 0.0011 - mse: 5.6582e-06
+Epoch 18: val_loss did not improve from 0.00000
+10/10 ━━━━━━━━━━━━━━━━━━━━ 1s 60ms/step - loss: 7.5757e-06 - mae: 0.0012 - mse: 7.5757e-06 - val_loss: 5.2074e-08 - val_mae: 2.2820e-04 - val_mse: 5.2074e-08 - learning_rate: 1.2500e-04
+Epoch 19/60
+ 9/10 ━━━━━━━━━━━━━━━━━━━━ 0s 42ms/step - loss: 3.1472e-06 - mae: 7.5429e-04 - mse: 3.1472e-06
+Epoch 19: val_loss did not improve from 0.00000
+10/10 ━━━━━━━━━━━━━━━━━━━━ 1s 57ms/step - loss: 3.4692e-06 - mae: 8.6685e-04 - mse: 3.4692e-06 - val_loss: 4.4809e-08 - val_mae: 2.1168e-04 - val_mse: 4.4809e-08 - learning_rate: 1.2500e-04
+Epoch 19: early stopping
+Restoring model weights from the end of the best epoch: 7.
+[RESULTS] Test MAE: 0.000 m  |  RMSE: 0.000 m
+[INFO] Training plot saved to D:\Documents\ACADEMIC\BTECH\TY\Sem-I_Mod-V\EDAI-V\OceanFrontRepo\OceanFront\backend\models\training_history.png
+[INFO] Saved model to D:\Documents\ACADEMIC\BTECH\TY\Sem-I_Mod-V\EDAI-V\OceanFrontRepo\OceanFront\backend\models\lstm_mld_model.keras
+Saved: D:\Documents\ACADEMIC\BTECH\TY\Sem-I_Mod-V\EDAI-V\OceanFrontRepo\OceanFront\backend\models\lstm_mld_model.keras
+Metrics (RMSE, MAE): (5.340576171875e-05, 5.340576171875e-05)
+Model: "sequential"
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━┓
+┃ Layer (type)                         ┃ Output Shape                ┃         Param # ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━┩
+│ lstm (LSTM)                          │ (None, 30, 128)             │          69,632 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ dropout (Dropout)                    │ (None, 30, 128)             │               0 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ lstm_1 (LSTM)                        │ (None, 30, 64)              │          49,408 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ dropout_1 (Dropout)                  │ (None, 30, 64)              │               0 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ lstm_2 (LSTM)                        │ (None, 32)                  │          12,416 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ dropout_2 (Dropout)                  │ (None, 32)                  │               0 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ dense (Dense)                        │ (None, 16)                  │             528 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ dropout_3 (Dropout)                  │ (None, 16)                  │               0 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ dense_1 (Dense)                      │ (None, 1)                   │              17 │
+└──────────────────────────────────────┴─────────────────────────────┴─────────────────┘
+ Total params: 396,005 (1.51 MB)
+ Trainable params: 132,001 (515.63 KB)
+ Non-trainable params: 0 (0.00 B)
+ Optimizer params: 264,004 (1.01 MB)
